@@ -1,5 +1,10 @@
 import { fileURLToPath, URL } from 'node:url'
 import path from 'path'
+import fs from 'fs'
+
+import { execSync } from 'node:child_process'
+import dayjs from 'dayjs'
+// const dayjs = require('dayjs')
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -12,6 +17,29 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 // SVG
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
+const curTime = dayjs().format('YYYY/MM/DD hh:mm:ss')
+
+console.log(curTime, '编译时间')
+
+// 打包时写入 git 信息
+if (process.env.NODE_ENV == 'production') {
+  try {
+    const resolve = (dir) => {
+      return path.join(__dirname, dir)
+    }
+    const commitId = execSync('git rev-parse HEAD', { encoding: 'utf8' })
+    const branch = execSync('git symbolic-ref --short HEAD', { encoding: 'utf8' })
+    const wirteInfo = `分支：${branch}\ncommit-id：${commitId}\n时间：${curTime}`
+    console.log(wirteInfo, 'git信息')
+    fs.writeFile(resolve('public/.versionLog'), wirteInfo, function (error) {
+      if (error) {
+        throw new Error(`\n commitID写入失败：${error}`)
+      }
+    })
+  } catch (error) {
+    console.log(error, '写入 git 信息失败')
+  }
+}
 export default defineConfig({
   server: {
     host: true,
@@ -45,12 +73,10 @@ export default defineConfig({
   ],
   // 打包相关配置
   build: {
-    terserOptions: {
-      compress: {
-        drop_console: true, // 清除 console
-        drop_debugger: true // 清除 debugger
-      }
-    }
+    minify: 'esbuild'
+  },
+  esbuild: {
+    drop: ['console', 'debugger']
   },
   // CSS 预处理器
   css: {

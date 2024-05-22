@@ -7,6 +7,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: () => import('@/views/index.vue')
+    },
+    {
+      path: '/drag',
+      name: 'drag',
+      component: () => import('@/views/drag.vue')
     }
   ]
 })

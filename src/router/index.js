@@ -12,6 +12,20 @@ const router = createRouter({
       path: '/drag',
       name: 'drag',
       component: () => import('@/views/drag.vue')
+    },
+    {
+      path: '/echarts',
+      name: 'echarts',
+      component: () => import('@/views/echarts/line.vue')
+    },
+    {
+      path: '/404',
+      component: () => import('@/views/404.vue')
+    },
+    {
+      path: '/:pathMatch(.*)',
+      name: '404',
+      redirect: '/404'
     }
   ]
 })

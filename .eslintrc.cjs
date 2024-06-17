@@ -44,7 +44,7 @@ module.exports = {
     'no-empty': 2, //块语句中的内容不能为空
     'no-redeclare': 2, //禁止重复声明变量
     'no-undef': 2, //不能有未定义的变量
-    'no-use-before-define': 2, //未定义前不能使用
+    // 'no-use-before-define': 2, //未定义前不能使用
     'no-unreachable': 1, //不能有无法执行的代码
     'default-case': 2, //switch语句最后必须有default
     'vue/multi-word-component-names': 'off',

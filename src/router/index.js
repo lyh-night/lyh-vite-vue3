@@ -24,6 +24,11 @@ const router = createRouter({
       component: () => import('@/views/topology/index.vue')
     },
     {
+      path: '/qrcode',
+      name: 'qrcode',
+      component: () => import('@/views/qrcode/index.vue')
+    },
+    {
       path: '/404',
       component: () => import('@/views/404.vue')
     },

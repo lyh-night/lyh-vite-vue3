@@ -11,12 +11,17 @@ const router = createRouter({
     {
       path: '/drag',
       name: 'drag',
-      component: () => import('@/views/drag.vue')
+      component: () => import('@/views/drag/index.vue')
     },
     {
       path: '/echarts',
       name: 'echarts',
       component: () => import('@/views/echarts/line.vue')
+    },
+    {
+      path: '/topology',
+      name: 'topology',
+      component: () => import('@/views/topology/index.vue')
     },
     {
       path: '/404',

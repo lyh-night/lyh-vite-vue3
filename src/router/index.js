@@ -1,43 +1,63 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
+
+export const asyncRoutesList = [
+  {
+    path: '/echarts',
+    name: 'echarts',
+    component: () => import('@/views/echarts/line.vue'),
+    meta: {
+      allowID: 1
+    }
+  },
+  {
+    path: '/drag',
+    name: 'drag',
+    component: () => import('@/views/drag/index.vue'),
+    meta: {
+      allowID: 1
+    }
+  },
+  {
+    path: '/topology',
+    name: 'topology',
+    component: () => import('@/views/topology/index.vue'),
+    meta: {
+      allowID: 1
+    }
+  },
+  {
+    path: '/qrcode',
+    name: 'qrcode',
+    component: () => import('@/views/qrcode/index.vue'),
+    meta: {
+      allowID: 1
+    }
+  }
+]
+
+export const constantRoutes = [
+  {
+    path: '/',
+    name: 'home',
+    component: () => import('@/views/index.vue')
+  },
+  {
+    path: '/resize',
+    name: 'resize',
+    component: () => import('@/views/resize/index.vue')
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/404.vue'),
+    hidden: true
+  }
+]
+
+export const redirectRoute = { path: '/:pathMatch(.*)', name: '404', redirect: '/404' }
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: () => import('@/views/index.vue')
-    },
-    {
-      path: '/drag',
-      name: 'drag',
-      component: () => import('@/views/drag/index.vue')
-    },
-    {
-      path: '/echarts',
-      name: 'echarts',
-      component: () => import('@/views/echarts/line.vue')
-    },
-    {
-      path: '/topology',
-      name: 'topology',
-      component: () => import('@/views/topology/index.vue')
-    },
-    {
-      path: '/qrcode',
-      name: 'qrcode',
-      component: () => import('@/views/qrcode/index.vue')
-    },
-    {
-      path: '/404',
-      component: () => import('@/views/404.vue')
-    },
-    {
-      path: '/:pathMatch(.*)',
-      name: '404',
-      redirect: '/404'
-    }
-  ]
+  history: createWebHashHistory(import.meta.env.BASE_URL),
+  routes: constantRoutes
 })
 
 export default router

@@ -18,7 +18,7 @@ defineOptions({
 })
 
 const props = defineProps({
-  lextMaxWidth: {
+  leftMaxWidth: {
     type: Number,
     default: 620
   },
@@ -56,8 +56,8 @@ const resize = (e) => {
   const newLeftWidth =
     initialLeftWidth.value + offsetX < props.leftMinWidth
       ? props.leftMinWidth
-      : initialLeftWidth.value + offsetX > props.lextMaxWidth
-        ? props.lextMaxWidth
+      : initialLeftWidth.value + offsetX > props.leftMaxWidth
+        ? props.leftMaxWidth
         : initialLeftWidth.value + offsetX
   const newRightWidth = containerRect?.width ? containerRect.width - newLeftWidth : 0
 

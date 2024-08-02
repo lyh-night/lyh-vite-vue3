@@ -1,6 +1,6 @@
 <template>
   <div class="topology-container">
-    <div id="container" />
+    <div ref="container" id="container" />
   </div>
 </template>
 
@@ -12,29 +12,30 @@
 import { Graph } from '@antv/g6'
 import { onMounted, onUnmounted } from 'vue'
 import { debounce } from 'lodash-es'
-import { defaultData } from './defaultConfig.js'
+import { deafultNodeConfig, defaultEdgeConfig, defaultLayoutConfig, defaultData } from './defaultConfig.js'
 let graph = null
 
+let container = ref(null)
+
 onMounted(() => {
+  nextTick(() => {
+    init()
+  })
+})
+
+function init() {
   const { width, height } = getLayoutWh()
   graph = new Graph({
     container: 'container', // 图的 DOM 容器 'id' || document.getElementById('container')
     width,
     height,
+    autoResize: true,
+    x: width / 2,
+    y: height / 4,
     behaviors: ['drag-canvas', 'zoom-canvas', 'drag-element'], // 交互
-    node: {
-      style: {
-        size: 20
-      }
-    },
-    edge: {
-      style: {
-        stroke: 'lightgreen'
-      }
-    },
-    layout: {
-      type: 'grid'
-    },
+    node: deafultNodeConfig,
+    edge: defaultEdgeConfig,
+    layout: defaultLayoutConfig,
     plugins: [
       { type: 'grid-line', follow: true },
       {
@@ -64,17 +65,14 @@ onMounted(() => {
       { type: 'CameraSetting', cameraType: 'tracking' }
     ]
   })
-  // console.log(graph, '数据')
   graph.setData(defaultData)
   graph.render()
   nodeClickFun()
   window.addEventListener('resize', debounce(changeGraphSize, 100))
-})
+}
 
 function getLayoutWh() {
-  const width = (document.documentElement.clientWidth || document.body.clientWidth) - 30
-  const height = (document.documentElement.clientHeight || document.body.clientHeight) - 30
-  return { width, height }
+  return { width: container.value.offsetWidth, height: container.value.offsetHeight }
 }
 
 function changeGraphSize() {

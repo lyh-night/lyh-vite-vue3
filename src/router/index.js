@@ -47,6 +47,11 @@ export const constantRoutes = [
     component: () => import('@/views/resize/index.vue')
   },
   {
+    path: '/ganttChart',
+    name: 'ganttChart',
+    component: () => import('@/views/ganttChart/index.vue')
+  },
+  {
     path: '/404',
     component: () => import('@/views/404.vue'),
     hidden: true

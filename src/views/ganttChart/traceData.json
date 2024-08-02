@@ -1,0 +1,544 @@
+{
+  "data": [
+    {
+      "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+      "spans": [
+        {
+          "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+          "spanID": "3a4cb27c91e1a4dd",
+          "operationName": "/hello",
+          "references": [],
+          "startTime": 1722409829354468,
+          "duration": 31095,
+          "tags": [
+            {
+              "key": "otel.library.name",
+              "type": "string",
+              "value": "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+            },
+            {
+              "key": "otel.library.version",
+              "type": "string",
+              "value": "0.43.0"
+            },
+            {
+              "key": "http.method",
+              "type": "string",
+              "value": "GET"
+            },
+            {
+              "key": "http.scheme",
+              "type": "string",
+              "value": "http"
+            },
+            {
+              "key": "http.flavor",
+              "type": "string",
+              "value": "1.1"
+            },
+            {
+              "key": "net.host.name",
+              "type": "string",
+              "value": "beego-web"
+            },
+            {
+              "key": "net.host.port",
+              "type": "int64",
+              "value": 7777
+            },
+            {
+              "key": "net.sock.peer.addr",
+              "type": "string",
+              "value": "::1"
+            },
+            {
+              "key": "net.sock.peer.port",
+              "type": "int64",
+              "value": 65428
+            },
+            {
+              "key": "http.user_agent",
+              "type": "string",
+              "value": "PostmanRuntime/7.29.2"
+            },
+            {
+              "key": "http.wrote_bytes",
+              "type": "int64",
+              "value": 744
+            },
+            {
+              "key": "http.status_code",
+              "type": "int64",
+              "value": 200
+            },
+            {
+              "key": "span.kind",
+              "type": "string",
+              "value": "server"
+            },
+            {
+              "key": "internal.span.format",
+              "type": "string",
+              "value": "otlp"
+            }
+          ],
+          "logs": [],
+          "processID": "p1",
+          "warnings": null
+        },
+        {
+          "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+          "spanID": "da70981203feca79",
+          "operationName": "postgres",
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+              "spanID": "3a4cb27c91e1a4dd"
+            }
+          ],
+          "startTime": 1722409829358593,
+          "duration": 815,
+          "tags": [
+            {
+              "key": "otel.library.name",
+              "type": "string",
+              "value": "github.com/jenbonzhang/otelxorm"
+            },
+            {
+              "key": "otel.library.version",
+              "type": "string",
+              "value": "semver:0.1.0"
+            },
+            {
+              "key": "db.name",
+              "type": "string",
+              "value": "postgres"
+            },
+            {
+              "key": "go.orm",
+              "type": "string",
+              "value": "xorm"
+            },
+            {
+              "key": "db.statement",
+              "type": "string",
+              "value": "select * from topec_user limit 2"
+            },
+            {
+              "key": "span.kind",
+              "type": "string",
+              "value": "client"
+            },
+            {
+              "key": "internal.span.format",
+              "type": "string",
+              "value": "otlp"
+            }
+          ],
+          "logs": [],
+          "processID": "p1",
+          "warnings": null
+        },
+        {
+          "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+          "spanID": "c7e51b99262ef35b",
+          "operationName": "pb.Greeter/SayHello",
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+              "spanID": "3a4cb27c91e1a4dd"
+            }
+          ],
+          "startTime": 1722409829359408,
+          "duration": 20929,
+          "tags": [
+            {
+              "key": "otel.library.name",
+              "type": "string",
+              "value": "go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
+            },
+            {
+              "key": "otel.library.version",
+              "type": "string",
+              "value": "0.53.0"
+            },
+            {
+              "key": "rpc.service",
+              "type": "string",
+              "value": "pb.Greeter"
+            },
+            {
+              "key": "rpc.method",
+              "type": "string",
+              "value": "SayHello"
+            },
+            {
+              "key": "rpc.system",
+              "type": "string",
+              "value": "grpc"
+            },
+            {
+              "key": "net.sock.peer.addr",
+              "type": "string",
+              "value": "127.0.0.1"
+            },
+            {
+              "key": "net.sock.peer.port",
+              "type": "int64",
+              "value": 8972
+            },
+            {
+              "key": "rpc.grpc.status_code",
+              "type": "int64",
+              "value": 0
+            },
+            {
+              "key": "span.kind",
+              "type": "string",
+              "value": "client"
+            },
+            {
+              "key": "internal.span.format",
+              "type": "string",
+              "value": "otlp"
+            }
+          ],
+          "logs": [],
+          "processID": "p1",
+          "warnings": null
+        },
+        {
+          "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+          "spanID": "83c935d65a66b5b2",
+          "operationName": "pb.Greeter/SayHello",
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+              "spanID": "c7e51b99262ef35b"
+            }
+          ],
+          "startTime": 1722409829361723,
+          "duration": 17548,
+          "tags": [
+            {
+              "key": "otel.library.name",
+              "type": "string",
+              "value": "go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
+            },
+            {
+              "key": "otel.library.version",
+              "type": "string",
+              "value": "0.53.0"
+            },
+            {
+              "key": "rpc.service",
+              "type": "string",
+              "value": "pb.Greeter"
+            },
+            {
+              "key": "rpc.method",
+              "type": "string",
+              "value": "SayHello"
+            },
+            {
+              "key": "rpc.system",
+              "type": "string",
+              "value": "grpc"
+            },
+            {
+              "key": "net.sock.peer.addr",
+              "type": "string",
+              "value": "127.0.0.1"
+            },
+            {
+              "key": "net.sock.peer.port",
+              "type": "int64",
+              "value": 65287
+            },
+            {
+              "key": "rpc.grpc.status_code",
+              "type": "int64",
+              "value": 0
+            },
+            {
+              "key": "span.kind",
+              "type": "string",
+              "value": "server"
+            },
+            {
+              "key": "internal.span.format",
+              "type": "string",
+              "value": "otlp"
+            }
+          ],
+          "logs": [],
+          "processID": "p2",
+          "warnings": null
+        },
+        {
+          "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+          "spanID": "905868a8bd517207",
+          "operationName": "postgres",
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+              "spanID": "83c935d65a66b5b2"
+            }
+          ],
+          "startTime": 1722409829363218,
+          "duration": 1021,
+          "tags": [
+            {
+              "key": "otel.library.name",
+              "type": "string",
+              "value": "github.com/jenbonzhang/otelxorm"
+            },
+            {
+              "key": "otel.library.version",
+              "type": "string",
+              "value": "semver:0.1.0"
+            },
+            {
+              "key": "db.name",
+              "type": "string",
+              "value": "postgres"
+            },
+            {
+              "key": "go.orm",
+              "type": "string",
+              "value": "xorm"
+            },
+            {
+              "key": "db.statement",
+              "type": "string",
+              "value": "select * from topec_user limit 2"
+            },
+            {
+              "key": "span.kind",
+              "type": "string",
+              "value": "client"
+            },
+            {
+              "key": "internal.span.format",
+              "type": "string",
+              "value": "otlp"
+            }
+          ],
+          "logs": [],
+          "processID": "p2",
+          "warnings": null
+        },
+        {
+          "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+          "spanID": "4996bdc687ae773d",
+          "operationName": "gin.renderer.html",
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+              "spanID": "893b93886feea2fa"
+            }
+          ],
+          "startTime": 1722409829373155,
+          "duration": 2262,
+          "tags": [
+            {
+              "key": "otel.library.name",
+              "type": "string",
+              "value": "go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
+            },
+            {
+              "key": "otel.library.version",
+              "type": "string",
+              "value": "0.53.0"
+            },
+            {
+              "key": "go.template",
+              "type": "string",
+              "value": "user"
+            },
+            {
+              "key": "span.kind",
+              "type": "string",
+              "value": "internal"
+            },
+            {
+              "key": "internal.span.format",
+              "type": "string",
+              "value": "otlp"
+            }
+          ],
+          "logs": [],
+          "processID": "p3",
+          "warnings": null
+        },
+        {
+          "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+          "spanID": "893b93886feea2fa",
+          "operationName": "/users/:id",
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+              "spanID": "83c935d65a66b5b2"
+            }
+          ],
+          "startTime": 1722409829373155,
+          "duration": 2262,
+          "tags": [
+            {
+              "key": "otel.library.name",
+              "type": "string",
+              "value": "go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
+            },
+            {
+              "key": "otel.library.version",
+              "type": "string",
+              "value": "0.53.0"
+            },
+            {
+              "key": "http.method",
+              "type": "string",
+              "value": "GET"
+            },
+            {
+              "key": "http.scheme",
+              "type": "string",
+              "value": "http"
+            },
+            {
+              "key": "net.host.name",
+              "type": "string",
+              "value": "my-server"
+            },
+            {
+              "key": "net.host.port",
+              "type": "int64",
+              "value": 8080
+            },
+            {
+              "key": "net.sock.peer.addr",
+              "type": "string",
+              "value": "::1"
+            },
+            {
+              "key": "net.sock.peer.port",
+              "type": "int64",
+              "value": 52417
+            },
+            {
+              "key": "user_agent.original",
+              "type": "string",
+              "value": "Go-http-client/1.1"
+            },
+            {
+              "key": "http.target",
+              "type": "string",
+              "value": "/users/123"
+            },
+            {
+              "key": "net.protocol.version",
+              "type": "string",
+              "value": "1.1"
+            },
+            {
+              "key": "http.route",
+              "type": "string",
+              "value": "/users/:id"
+            },
+            {
+              "key": "http.status_code",
+              "type": "int64",
+              "value": 502
+            },
+            {
+              "key": "span.kind",
+              "type": "string",
+              "value": "server"
+            },
+            {
+              "key": "otel.status_code",
+              "type": "string",
+              "value": "ERROR"
+            },
+            {
+              "key": "error",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "key": "internal.span.format",
+              "type": "string",
+              "value": "otlp"
+            }
+          ],
+          "logs": [],
+          "processID": "p3",
+          "warnings": null
+        },
+        {
+          "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+          "spanID": "71c5f55fc07a11b9",
+          "operationName": "getUser",
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "1675dbe2c434663f3f50ee5d5721f3d3",
+              "spanID": "893b93886feea2fa"
+            }
+          ],
+          "startTime": 1722409829373155,
+          "duration": 0,
+          "tags": [
+            {
+              "key": "otel.library.name",
+              "type": "string",
+              "value": "gin-server"
+            },
+            {
+              "key": "id",
+              "type": "string",
+              "value": "123"
+            },
+            {
+              "key": "span.kind",
+              "type": "string",
+              "value": "internal"
+            },
+            {
+              "key": "internal.span.format",
+              "type": "string",
+              "value": "otlp"
+            }
+          ],
+          "logs": [],
+          "processID": "p3",
+          "warnings": null
+        }
+      ],
+      "processes": {
+        "p1": {
+          "serviceName": "mytest_02_beego",
+          "tags": []
+        },
+        "p2": {
+          "serviceName": "test_03_grpc",
+          "tags": []
+        },
+        "p3": {
+          "serviceName": "test_04_gin",
+          "tags": []
+        }
+      },
+      "warnings": null
+    }
+  ],
+  "total": 0,
+  "limit": 0,
+  "offset": 0,
+  "errors": null
+}

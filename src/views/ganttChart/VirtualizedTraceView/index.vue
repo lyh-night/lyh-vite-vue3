@@ -4,12 +4,20 @@
       <div class="VirtualizedTraceView--row" @click.stop="openDetail(item)">
         <div class="left" :style="`width: ${width}%`">
           <div class="level">
-            <span v-for="i in getLevelIndentNum(item, level)" :key="`indent-block-${i}-${level}`" class="level-block" />
+            <span
+              v-for="i in getLevelIndentNum(item, level)"
+              :key="`indent-block-${i}-${level}`"
+              :class="[
+                'block',
+                i == getLevelIndentNum(item, level) && (!item.children || !item.children.length) ? '' : 'block-border'
+              ]"
+            />
           </div>
           <div class="main">
             <div class="title">
               <span v-if="item.children && item.children.length" class="icon-expend" @click.stop="changeExpend(item)">
-                >
+                <icon-ep-ArrowDown v-if="item.expend" />
+                <icon-ep-ArrowRight v-else />
               </span>
               <p :style="`border-left: 4px solid ${item.fillColor}`">
                 <span class="serviceName">{{ item.serviceName }}</span>
@@ -41,7 +49,6 @@
 
 <script>
 import { defineComponent } from 'vue'
-import colorGenerator from '../js/color.js'
 import TimelineRowCell from '../TimelineRowCell/index.vue'
 import SpanDetailRow from '../SpanDetailRow/index.vue'
 export default defineComponent({
@@ -100,9 +107,11 @@ export default defineComponent({
   .level {
     height: 100%;
     display: flex;
-    .level-block {
+    .block {
       width: 20px;
       height: 100%;
+    }
+    .block-border {
       border-right: 1px solid #d3d3d3;
     }
   }

@@ -1,5 +1,7 @@
 // 项目工具类函数
 
+import Big from 'big.js'
+
 // 深拷贝  lodash 组件  深拷贝  _.cloneDeep
 export function deepClone(target, hash = new WeakMap()) {
   // 额外开辟一个存储空间WeakMap来存储当前对象
@@ -29,3 +31,16 @@ export const getParameters = (URL) =>
 
 // 两日期相差天数
 export const dayDiff = (date1, date2) => Math.ceil(Math.abs(date1.getTime() - date2.getTime()) / 86400000)
+
+// js精度问题
+// 解决 JS小数运算精度丢失问题  例如: 0.1 + 0.2 !== 0.3  0.07 * 100 = 7.0000000000001
+// key Big 实例方法:abs add cmp div eq gt gte lt lte minus mod mul plus pow round sqrt sub times toExponential toFixed toJSON  toPrecision
+// 具体传参请看bigjs源码
+export const FormatBigCount = (key, val1, val2) => {
+  const big = new Big(val1)
+  const def = big && big[key]
+  if (def) {
+    return big[key](val2).toString()
+  }
+  return new Error('key方法 不存在')
+}

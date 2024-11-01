@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 export const asyncRoutesList = [
   {
@@ -52,16 +52,22 @@ export const constantRoutes = [
     component: () => import('@/views/ganttChart/index.vue')
   },
   {
+    path: '/upload/slice',
+    name: 'uploadSlice',
+    component: () => import('@/views/upload/slice/index.vue')
+  },
+  {
     path: '/404',
+    name: '404',
     component: () => import('@/views/404.vue'),
     hidden: true
   }
 ]
 
-export const redirectRoute = { path: '/:pathMatch(.*)', name: '404', redirect: '/404' }
+export const redirectRoute = { path: '/:pathMatch(.*)', name: 'redirect', redirect: '/404' }
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: constantRoutes
 })
 

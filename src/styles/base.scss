@@ -6,3 +6,16 @@
   box-sizing: border-box;
   margin: 0;
 }
+
+@font-face {
+  font-family: 'Source Han Sans';
+  src: url('../assets/fonts/SourceHanSansCN-VF.woff2') format('woff2');
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap; /* 异步加载，避免 FOIT */
+}
+
+/* 应用字体 */
+body {
+  font-family: 'Source Han Sans', sans-serif;
+}

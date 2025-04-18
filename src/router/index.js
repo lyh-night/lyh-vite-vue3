@@ -57,6 +57,11 @@ export const constantRoutes = [
     component: () => import('@/views/upload/slice/index.vue')
   },
   {
+    path: '/chat',
+    name: 'chat',
+    component: () => import('@/views/chat/index.vue')
+  },
+  {
     path: '/404',
     name: '404',
     component: () => import('@/views/404.vue'),

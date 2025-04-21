@@ -220,29 +220,29 @@ var SSE = function (url, options) {
       this.lastEventId = e.id
     }
 
-    if (e.event) {
+    // if (e.event) {
       const event = new CustomEvent(e.event || 'message')
       event.id = e.id
       event.data = e.data || ''
       event.lastEventId = this.lastEventId
       return event
-    } else {
-      // 考虑一种情况，单纯后端报错；
-      // 要与正常对话结束返回的JSON区分，且要与alert类型（报错类型）后的返回区分
-      try {
-        const { data } = JSON.parse(chunk)
-        if (data && data.status.code) {
-          // 后端报错
-          const errorEvent = new CustomEvent('alert')
-          errorEvent.id = e.id
-          errorEvent.data = JSON.stringify(data.status)
-          errorEvent.lastEventId = this.lastEventId
-          return errorEvent
-        }
-      } catch (e) {
-        console.log(e)
-      }
-    }
+    // } else {
+    //   // 考虑一种情况，单纯后端报错；
+    //   // 要与正常对话结束返回的JSON区分，且要与alert类型（报错类型）后的返回区分
+    //   try {
+    //     const { data } = JSON.parse(chunk)
+    //     if (data && data.status.code) {
+    //       // 后端报错
+    //       const errorEvent = new CustomEvent('alert')
+    //       errorEvent.id = e.id
+    //       errorEvent.data = JSON.stringify(data.status)
+    //       errorEvent.lastEventId = this.lastEventId
+    //       return errorEvent
+    //     }
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
+    // }
   }
 
   this._onReadyStateChange = function () {

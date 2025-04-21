@@ -98,11 +98,11 @@ function scrollToBottom() {
 function createSseRequest() {
   state.eventSourceChat = new SSE('http://localhost:3000/api/chat', {
     method: 'post',
-    header: {
-      'Content-type': 'text/event-stream',
+    headers: {
+      'Content-Type': 'text/event-stream',
       Authorization: ''
     },
-    payload: JSON.stringify()
+    payload: JSON.stringify({ message: state.inputMessage })
   })
   let buffer = ''
   let displayBuffer = ''
@@ -113,13 +113,14 @@ function createSseRequest() {
     state.eventSourceChat.close()
   }
   state.eventSourceChat.onmessage = async (event) => {
-    console.log(event)
+    // console.log(event)
     if (event.data == '[DONE]') {
       return
     }
     const content = JSON.parse(event.data)
     if (content) {
-      let message = content[0].delta?.data
+      let message = content
+      // let message = content[0].delta?.data
       buffer += message
       // 思考内容
       // if (message.includes('<think>') || message.includes('</think>')) {
@@ -128,7 +129,7 @@ function createSseRequest() {
       if (state.outputInterval) return
       state.outputInterval = setInterval(() => {
         if (displayBuffer.length < buffer.length) {
-          const addChars = buffer.slice(displayBuffer.length, Math.min(3, buffer.length - displayBuffer.length))
+          const addChars = buffer.slice(displayBuffer.length, Math.min(displayBuffer.length + 3, buffer.length))
           displayBuffer = displayBuffer + addChars
           state.contentList[state.contentList.length - 1].message = state.marketIt.render(displayBuffer)
         } else {

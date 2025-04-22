@@ -62,6 +62,11 @@ export const constantRoutes = [
     component: () => import('@/views/chat/index.vue')
   },
   {
+    path: '/codemirror',
+    name: 'codemirror',
+    component: () => import('@/views/codemirror/index.vue')
+  },
+  {
     path: '/404',
     name: '404',
     component: () => import('@/views/404.vue'),

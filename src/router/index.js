@@ -39,7 +39,7 @@ export const constantRoutes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/views/index.vue')
+    component: () => import('@/views/home/index.vue')
   },
   {
     path: '/resize',
@@ -69,7 +69,7 @@ export const constantRoutes = [
   {
     path: '/404',
     name: '404',
-    component: () => import('@/views/404.vue'),
+    component: () => import('@/views/other/404.vue'),
     hidden: true
   }
 ]

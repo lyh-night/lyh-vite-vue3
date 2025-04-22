@@ -97,15 +97,36 @@ export default defineConfig({
       }
     },
     rollupOptions: {
-      // 打包文件分类输出
       output: {
-        chunkFileNames: 'js/[name]-[hash].js', // 引入文件名的名称
-        entryFileNames: 'js/[name]-[hash].js', // 包的入口文件名称
-        assetFileNames: '[ext]/[name]-[hash].[ext]', // 资源文件像 字体，图片等
-        // 最小化拆分包
+        entryFileNames: (chunkInfo) => {
+          const name =
+            chunkInfo.name === 'index' && chunkInfo.facadeModuleId
+              ? chunkInfo.facadeModuleId.split('/').slice(-2, -1)
+              : chunkInfo.name
+          return `js/${name}-[hash].js`
+        },
+        chunkFileNames: (chunkInfo) => {
+          const name =
+            chunkInfo.name === 'index' && chunkInfo.facadeModuleId
+              ? chunkInfo.facadeModuleId.split('/').slice(-2, -1)
+              : chunkInfo.name
+          return `js/${name}-[hash].js`
+        },
+        assetFileNames: (assetInfo) => {
+          const name = assetInfo.names?.[0] || ''
+          const ext = name.split('.').pop()?.toLowerCase()
+          if (!ext) return 'assets/[name]-[hash][extname]'
+          if (['css'].includes(ext)) return 'css/[hash][extname]'
+          if (['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'].includes(ext)) return 'images/[name]-[hash][extname]'
+          if (['woff', 'woff2', 'ttf', 'otf', 'eot'].includes(ext)) return 'fonts/[name]-[hash][extname]'
+          if (['mp4', 'webm', 'ogg'].includes(ext)) return 'videos/[name]-[hash][extname]'
+          return 'assets/[name]-[hash][extname]'
+        },
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            return id.toString().split('node_modules/')[1].split('/')[0].toString()
+            if (id.includes('element-plus')) return 'vendor-element'
+            if (id.includes('echarts')) return 'vendor-echarts'
+            return 'vendor'
           }
         }
       }

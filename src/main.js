@@ -10,6 +10,9 @@ import '@/styles/index.scss'
 // SVG
 import 'virtual:svg-icons-register'
 
+// 图标
+import '@/assets/icon/iconfont.css'
+
 // 全局组件
 import globalComponents from '@/components/index.js'
 

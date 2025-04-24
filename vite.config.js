@@ -23,7 +23,7 @@ import IconsResolver from 'unplugin-icons/resolver'
 // SVG
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
-const curTime = dayjs().format('YYYY/MM/DD hh:mm:ss')
+const curTime = dayjs().format('YYYY/MM/DD HH:mm:ss')
 
 console.log(curTime, '编译时间')
 

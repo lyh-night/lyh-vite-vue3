@@ -1,7 +1,6 @@
 <template>
-  <LazyLoading> 首页 </LazyLoading>
-  <div />
   <button @click="updateToken">点击</button>
+  <i class="iconfont icon-add-circle"></i>
 </template>
 
 <script setup>

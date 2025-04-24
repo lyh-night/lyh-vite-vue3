@@ -98,25 +98,18 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        entryFileNames: (chunkInfo) => {
-          const name =
-            chunkInfo.name === 'index' && chunkInfo.facadeModuleId
-              ? chunkInfo.facadeModuleId.split('/').slice(-2, -1)
-              : chunkInfo.name
-          return `js/${name}-[hash].js`
-        },
+        entryFileNames: 'js/entry-[hash].js',
         chunkFileNames: (chunkInfo) => {
-          const name =
-            chunkInfo.name === 'index' && chunkInfo.facadeModuleId
-              ? chunkInfo.facadeModuleId.split('/').slice(-2, -1)
-              : chunkInfo.name
-          return `js/${name}-[hash].js`
+          if (chunkInfo.name.includes('vendor')) {
+            return 'libs/[name]-[hash].js'
+          }
+          return 'js/chunk-[hash].js'
         },
         assetFileNames: (assetInfo) => {
           const name = assetInfo.names?.[0] || ''
           const ext = name.split('.').pop()?.toLowerCase()
           if (!ext) return 'assets/[name]-[hash][extname]'
-          if (['css'].includes(ext)) return 'css/[hash][extname]'
+          if (['css'].includes(ext)) return 'css/chunk-[hash][extname]'
           if (['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'].includes(ext)) return 'images/[name]-[hash][extname]'
           if (['woff', 'woff2', 'ttf', 'otf', 'eot'].includes(ext)) return 'fonts/[name]-[hash][extname]'
           if (['mp4', 'webm', 'ogg'].includes(ext)) return 'videos/[name]-[hash][extname]'
@@ -126,6 +119,7 @@ export default defineConfig({
           if (id.includes('node_modules')) {
             if (id.includes('element-plus')) return 'vendor-element'
             if (id.includes('echarts')) return 'vendor-echarts'
+            if (id.includes('codemirror')) return 'vendor-codemirror'
             return 'vendor'
           }
         }

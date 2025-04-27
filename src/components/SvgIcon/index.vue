@@ -1,5 +1,5 @@
 <template>
-  <svg aria-hidden="true" class="svg-icon" :fill="color" :width="width" :height="height">
+  <svg aria-hidden="true" :fill="color" :width="width" :height="height">
     <use :xlink:href="`#${prefix}-${name}`" />
   </svg>
 </template>
@@ -7,7 +7,7 @@
 <script>
 import { defineComponent } from 'vue'
 export default defineComponent({
-  name: 'svg-icon',
+  name: 'SvgIcon',
   props: {
     prefix: {
       type: String,
@@ -25,7 +25,7 @@ export default defineComponent({
     },
     color: {
       type: String,
-      default: '#333'
+      default: ''
     }
   }
 })

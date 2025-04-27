@@ -22,7 +22,7 @@
         v-model="state.inputMessage"
         :rows="2"
         placeholder="请输入内容开始对话（shift+Enter换行）"
-        @keyup.enter="handleEnter"
+        @keydown.enter="handleEnter"
       />
       <div class="talk-btn">
         <el-icon class="send-icon" @click="handleSubmit"><icon-ep-Top /></el-icon>
@@ -44,7 +44,9 @@ const state = reactive({
   ],
   eventSourceChat: null,
   outputInterval: null,
-  marketIt: {}
+  marketIt: {},
+  startTime: null,
+  endTime: null
 })
 
 onMounted(() => {
@@ -65,7 +67,7 @@ function createMarkdownInstance() {
 }
 
 function handleEnter(event) {
-  if (event.key === 'Enter' && event.shiftKey) {
+  if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault()
     handleSubmit()
   }
@@ -104,6 +106,7 @@ function createSseRequest() {
     },
     payload: JSON.stringify({ message: state.inputMessage })
   })
+  state.inputMessage = ''
   let buffer = ''
   let displayBuffer = ''
   state.eventSourceChat.onerror = async () => {
@@ -120,24 +123,32 @@ function createSseRequest() {
     const content = JSON.parse(event.data)
     if (content) {
       let message = content
-      // let message = content[0].delta?.data
       buffer += message
       // 思考内容
-      // if (message.includes('<think>') || message.includes('</think>')) {
-      //   //
-      // } else {
-      if (state.outputInterval) return
-      state.outputInterval = setInterval(() => {
-        if (displayBuffer.length < buffer.length) {
-          const addChars = buffer.slice(displayBuffer.length, Math.min(displayBuffer.length + 3, buffer.length))
-          displayBuffer = displayBuffer + addChars
-          state.contentList[state.contentList.length - 1].message = state.marketIt.render(displayBuffer)
-        } else {
-          clearInterval(state.outputInterval)
-          state.outputInterval = null
+      // 记录思考时间
+      if (message.includes('<think>') || message.includes('</think>')) {
+        if (message.includes('<think>')) {
+          state.startTime = Math.floor(new Date().getTime() / 1000)
+          // buffer = buffer.replaceAll('<think>', `<div class="think-time">思考中......</div><section id="think_content_${index}">`)
         }
-      }, 20)
-      // }
+        if (message.includes('</think>')) {
+          state.endTime = Math.floor(new Date().getTime() / 1000)
+          // message = '</section>'
+          // buffer = buffer.replaceAll('<div class="think-time">思考中......</div>', ``)
+        }
+      } else {
+        if (state.outputInterval) return
+        state.outputInterval = setInterval(() => {
+          if (displayBuffer.length < buffer.length) {
+            const addChars = buffer.slice(displayBuffer.length, Math.min(displayBuffer.length + 3, buffer.length))
+            displayBuffer = displayBuffer + addChars
+            state.contentList[state.contentList.length - 1].message = state.marketIt.render(displayBuffer)
+          } else {
+            clearInterval(state.outputInterval)
+            state.outputInterval = null
+          }
+        }, 20)
+      }
     }
   }
 }

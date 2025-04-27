@@ -16,10 +16,6 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
-// element icon 图标
-import Icons from 'unplugin-icons/vite'
-import IconsResolver from 'unplugin-icons/resolver'
-
 // SVG
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
@@ -60,7 +56,7 @@ export default defineConfig({
     vue(),
     AutoImport({
       imports: ['vue'], // 自动导入 Vue 相关函数，如：ref, reactive, toRef 等
-      resolvers: [ElementPlusResolver(), IconsResolver()],
+      resolvers: [ElementPlusResolver()],
       // 解决自动导入后 eslint 报错
       eslintrc: {
         enabled: false,
@@ -69,16 +65,7 @@ export default defineConfig({
       }
     }),
     Components({
-      resolvers: [
-        ElementPlusResolver(),
-        IconsResolver({
-          prefix: 'icon',
-          enabledCollections: ['ep']
-        })
-      ]
-    }),
-    Icons({
-      autoInstall: true
+      resolvers: [ElementPlusResolver()]
     }),
     createSvgIconsPlugin({
       iconDirs: [path.resolve(process.cwd(), 'src/assets/svg')],

@@ -4,7 +4,7 @@
       <div v-if="!state.isCollapsed" class="chat-add">
         <span>新建对话</span>
       </div>
-      <el-icon class="fold-btn" @click="changeCollapsed"><icon-ep-Fold /></el-icon>
+      <i class="fold-btn iconfont icon-menu" @click="changeCollapsed" />
     </div>
     <div v-if="!state.isCollapsed" class="history-list">
       <div v-for="(list, key) in state.historyObj" :key="key">

@@ -1,7 +1,7 @@
 <template>
   <div class="talk-container">
     <div v-if="state.contentList == 0" class="talk-welcome">
-      <h1>你好我是xxxx</h1>
+      <h1>我是 DeepSeek，很高兴见到你！</h1>
       <p>我可以帮你写代码、读文件、写作各种创意内容，请把你的任务交给我吧~</p>
     </div>
     <div v-else class="talk-box">
@@ -11,8 +11,8 @@
             <div>{{ item.message }}</div>
           </div>
           <div v-if="item.type == 'answer'" class="answer">
-            <img src="@/assets/svg/deepseek.svg" />
-            <div v-html="item.message" />
+            <SvgIcon name="deepseek" width="32px" height="32px" />
+            <div v-html="item.message" :class="['markdown-body', state.loading ? 'markdown-body-generate' : '']" />
           </div>
         </div>
       </div>
@@ -25,7 +25,7 @@
         @keydown.enter="handleEnter"
       />
       <div class="talk-btn">
-        <el-icon class="send-icon" @click="handleSubmit"><icon-ep-Top /></el-icon>
+        <i class="send-icon iconfont icon-direction-up" @click="handleSubmit" />
       </div>
     </div>
   </div>
@@ -37,11 +37,9 @@ import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js'
 
 const state = reactive({
+  loading: false,
   inputMessage: '',
-  contentList: [
-    { type: 'send', message: 'send' },
-    { type: 'answer', message: 'answer' }
-  ],
+  contentList: [],
   eventSourceChat: null,
   outputInterval: null,
   marketIt: {},
@@ -155,6 +153,8 @@ function createSseRequest() {
 </script>
 
 <style lang="scss" scoped>
+@use './markdown-body.scss';
+
 .talk-container {
   height: 100%;
   .talk-welcome {
@@ -218,14 +218,20 @@ function createSseRequest() {
         justify-content: flex-end;
         height: 30px;
         line-height: 30px;
+        animation: fadeIn 0.5s ease forwards;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
       .answer {
         display: flex;
-        img {
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-        }
         div {
           width: calc(100% - 30px);
         }

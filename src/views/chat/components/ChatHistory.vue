@@ -79,7 +79,7 @@ function getHsitoryList() {
     return classifyData
   }
   state.historyObj = classifyDate(historyList, cur_time)
-  console.log(state.historyObj, '数据')
+  // console.log(state.historyObj, '数据')
 }
 
 function selectChat(row) {

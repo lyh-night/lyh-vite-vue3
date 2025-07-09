@@ -27,7 +27,7 @@ const props = defineProps({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @use '../style/markdown-body.scss';
 .talk-box {
   height: calc(100% - 140px);
@@ -62,7 +62,7 @@ const props = defineProps({
     }
     .answer {
       display: flex;
-      div {
+      .markdown-body {
         width: calc(100% - 30px);
       }
     }

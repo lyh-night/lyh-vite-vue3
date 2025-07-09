@@ -72,6 +72,7 @@ function handleSubmit() {
       width: 30px;
       height: 30px;
       line-height: 30px;
+      text-align: center;
       background-color: #d6dee8;
       border-radius: 50%;
       color: #fafafa;

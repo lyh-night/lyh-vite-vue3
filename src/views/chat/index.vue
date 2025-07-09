@@ -47,27 +47,24 @@ function bindCopyEvent() {
     })
   })
 }
+
 function createMarkdownInstance() {
   state.marketIt = new MarkdownIt({
     html: false,
     linkify: true,
-    highlight: function (str, lang) {
-      let codeHtml = ''
-      if (lang && hljs.getLanguage(lang)) {
-        try {
-          codeHtml = hljs.highlight(str, { language: lang }).value
-        } catch (__) {}
-      } else {
-        codeHtml = state.marketIt.utils.escapeHtml(str)
+    highlight: function (code, language) {
+      const validLang = !!(language && hljs.getLanguage(language))
+      if (validLang) {
+        const lang = language ?? ''
+        return highlightBlock(hljs.highlight(code, { language: lang }).value, lang)
       }
-      return `
-      <div class="code-block-wrapper" style="position: relative;">
-        <button class="copy-btn" data-code="${encodeURIComponent(str)}" style="position: absolute; top: 6px; right: 6px; z-index: 10;">复制</button>
-      </div>
-       <pre><code class="hljs language-${lang}">${codeHtml}</code></pre>
-    `
+      return highlightBlock(hljs.highlightAuto(code).value, '')
     }
   })
+}
+
+function highlightBlock(str, lang) {
+  return `<pre class="code-block-wrapper"> <div class="code-block-header"> <span class="code-block-header__lang"> ${lang}</span><span class="code-block-header__copy"> 复制</span> </div> <code class="hljs code-block-body ${lang}">${str}</code> </pre>`
 }
 
 async function createDialogue(message) {

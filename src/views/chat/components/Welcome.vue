@@ -18,7 +18,7 @@ const state = reactive({
   text-align: center;
   h1 {
     margin-bottom: 20px;
-    font-size: 30px;
+    font-size: 24px;
   }
   p {
     color: #8f9aad;

@@ -1,6 +1,6 @@
 <template>
-  <div class="chat-content">
-    <div ref="logContainer" class="talk-content">
+  <div ref="scrollRef" class="chat-content">
+    <div ref="contentRef" class="talk-content">
       <div v-for="(item, i) in props.contentList" :key="i" class="chat-assistant">
         <div v-if="item.type == 'send'" class="send">
           <div>{{ item.message }}</div>
@@ -16,6 +16,7 @@
 
 <script setup>
 import 'github-markdown-css/github-markdown.css'
+import { useScroll } from '../js/useScroll.js'
 const props = defineProps({
   loading: {
     type: Boolean,
@@ -27,12 +28,32 @@ const props = defineProps({
   }
 })
 
-const logContainer = ref(null)
+const { scrollRef, scrollToBottom } = useScroll()
 
 onMounted(() => {
-  console.log(logContainer.value.scrollTop, 'ref')
-  console.log(logContainer.value.scrollHeight, 'ref')
+  console.log(scrollRef.value.scrollTop, 'ref')
+  console.log(scrollRef.value.scrollHeight, 'ref')
+  // scrollToBottom()
 })
+
+onUpdated(() => {
+  // scrollToBottom()
+})
+
+const contentRef = ref(null)
+
+function scrollChatStart() {
+  console.log(scrollRef.value.scrollTop, 'ref')
+  console.log(scrollRef.value.scrollHeight, 'ref')
+  console.log(contentRef.value.clientHeight, 'clientheight')
+  // scrollToBottom()
+  if (scrollRef.value) {
+    scrollRef.value.style.height = scrollRef.value.clientHeight + contentRef.value.clientHeight
+    scrollRef.value.scrollTop = contentRef.value.clientHeight
+  }
+}
+
+defineExpose({ scrollChatStart })
 </script>
 
 <style lang="scss">

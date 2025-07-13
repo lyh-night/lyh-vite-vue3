@@ -9,7 +9,8 @@
       @input="updateHeight"
     />
     <div class="talk-btn">
-      <i v-if="!props.loading" class="send-icon iconfont icon-direction-up" @click="handleSubmit" />
+      <i v-if="!props.loading" class="send-icon iconfont icon-icon_AI_fasong" @click="handleSubmit" />
+      <i v-else class="send-icon iconfont icon-wendangai-zanting" @click="stopChat" />
     </div>
   </div>
 </template>
@@ -21,7 +22,7 @@ const props = defineProps({
     default: false
   }
 })
-const emits = defineEmits(['createDialogue'])
+const emits = defineEmits(['createDialogue', 'stopChat'])
 
 const state = reactive({
   inputMessage: ''
@@ -52,6 +53,10 @@ const updateHeight = () => {
   const el = textareaRef.value
   el.style.height = 'auto'
   el.style.height = Math.min(el.scrollHeight, 120) + 'px'
+}
+
+function stopChat() {
+  emits('stopChat')
 }
 </script>
 
@@ -89,14 +94,8 @@ const updateHeight = () => {
     justify-content: flex-end;
     .send-icon {
       cursor: pointer;
-      font-size: 26px;
-      width: 30px;
-      height: 30px;
-      line-height: 30px;
-      text-align: center;
-      background-color: #d6dee8;
-      border-radius: 50%;
-      color: #fafafa;
+      font-size: 30px;
+      color: #222;
     }
   }
 }

@@ -3,8 +3,8 @@
     <ChatHistory />
     <div class="chat-window">
       <Welcome v-if="state.contentList.length === 0" />
-      <ChatContent v-else :loading="state.loading" :contentList="state.contentList" />
-      <ChatInput @createDialogue="createDialogue" :loading="state.loading" />
+      <ChatContent v-else ref="ChatContentRef" :loading="state.loading" :contentList="state.contentList" />
+      <ChatInput :loading="state.loading" @createDialogue="createDialogue" @stopChat="stopChat" />
     </div>
   </div>
 </template>
@@ -28,7 +28,8 @@ const state = reactive({
   outputInterval: null,
   marketIt: {},
   startTime: null,
-  endTime: null
+  endTime: null,
+  chatController: null
 })
 
 onMounted(() => {
@@ -67,14 +68,20 @@ function highlightBlock(str, lang) {
   return `<pre class="code-block-wrapper"> <div class="code-block-header"> <span class="code-block-header__lang"> ${lang}</span><span class="code-block-header__copy"> 复制</span> </div> <code class="hljs code-block-body ${lang}">${str}</code> </pre>`
 }
 
+const ChatContentRef = ref(null)
+
 async function createDialogue(message) {
   state.contentList.push({ type: 'send', message: message })
   state.contentList.push({ type: 'answer', message: '<div class="think-time">思考中......</div>' })
 
+  nextTick(() => {
+    ChatContentRef.value.scrollChatStart()
+  })
+
   let buffer = ''
   let displayBuffer = ''
 
-  const controller = new AbortController()
+  state.chatController = new AbortController()
 
   state.loading = true
   await fetchEventSource('http://localhost:3000/api/chat', {
@@ -84,7 +91,7 @@ async function createDialogue(message) {
       'Content-Type': 'application/json'
       // Authorization: 'Bearer your-token'
     },
-    signal: controller.signal,
+    signal: state.chatController.signal,
 
     onopen(res) {
       if (res.ok && res.headers.get('content-type') === 'text/event-stream') {
@@ -141,9 +148,12 @@ async function createDialogue(message) {
       throw err
     }
   })
+}
 
-  // 后续如果需要取消
-  // controller.abort()
+function stopChat() {
+  // 取消对话
+  state.chatController && state.chatController.abort()
+  state.loading = false
 }
 </script>
 

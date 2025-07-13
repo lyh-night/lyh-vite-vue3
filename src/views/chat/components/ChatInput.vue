@@ -1,18 +1,26 @@
 <template>
   <div class="talk-send">
     <textarea
+      ref="textareaRef"
       v-model="state.inputMessage"
       :rows="2"
       placeholder="请输入内容开始对话（shift+Enter换行）"
       @keydown.enter="handleEnter"
+      @input="updateHeight"
     />
     <div class="talk-btn">
-      <i class="send-icon iconfont icon-direction-up" @click="handleSubmit" />
+      <i v-if="!props.loading" class="send-icon iconfont icon-direction-up" @click="handleSubmit" />
     </div>
   </div>
 </template>
 
 <script setup>
+const props = defineProps({
+  loading: {
+    type: Boolean,
+    default: false
+  }
+})
 const emits = defineEmits(['createDialogue'])
 
 const state = reactive({
@@ -37,13 +45,25 @@ function handleSubmit() {
   emits('createDialogue', state.inputMessage)
   state.inputMessage = ''
 }
+
+const textareaRef = ref(null)
+
+const updateHeight = () => {
+  const el = textareaRef.value
+  el.style.height = 'auto'
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px'
+}
 </script>
 
 <style lang="scss" scoped>
 .talk-send {
+  width: calc(100% - 40px);
+  max-width: 960px;
+  min-width: 360px;
+  margin: 0px 20px 20px 20px;
   padding: 5px 10px;
+  box-sizing: border-box;
   border-radius: 10px;
-  margin: 0px 20%;
   background-color: #f1f2f7;
   textarea {
     width: 100%;
@@ -54,8 +74,9 @@ function handleSubmit() {
     overflow: auto;
     background-color: #f1f2f7;
     line-height: 1.5;
-    max-height: 200px;
+    max-height: 120px;
     font-family: inherit;
+    transition: height 0.2s ease;
     &:focus {
       outline: none;
     }

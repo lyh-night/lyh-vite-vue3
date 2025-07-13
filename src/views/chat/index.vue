@@ -4,7 +4,7 @@
     <div class="chat-window">
       <Welcome v-if="state.contentList.length === 0" />
       <ChatContent v-else :loading="state.loading" :contentList="state.contentList" />
-      <ChatInput @createDialogue="createDialogue" />
+      <ChatInput @createDialogue="createDialogue" :loading="state.loading" />
     </div>
   </div>
 </template>
@@ -71,11 +71,12 @@ async function createDialogue(message) {
   state.contentList.push({ type: 'send', message: message })
   state.contentList.push({ type: 'answer', message: '<div class="think-time">思考中......</div>' })
 
-  state.inputMessage = ''
   let buffer = ''
   let displayBuffer = ''
 
   const controller = new AbortController()
+
+  state.loading = true
   await fetchEventSource('http://localhost:3000/api/chat', {
     method: 'POST',
     body: JSON.stringify({ prompt: message }),
@@ -101,15 +102,14 @@ async function createDialogue(message) {
       }
       const content = JSON.parse(event.data)
       if (content) {
-        let message = content
-        buffer += message
+        buffer += content
         // 思考内容 记录思考时间
-        if (message.includes('<think>') || message.includes('</think>')) {
-          if (message.includes('<think>')) {
+        if (content.includes('<think>') || content.includes('</think>')) {
+          if (content.includes('<think>')) {
             state.startTime = Math.floor(new Date().getTime() / 1000)
             // buffer = buffer.replaceAll('<think>', `<div class="think-time">思考中......</div><section id="think_content_${index}">`)
           }
-          if (message.includes('</think>')) {
+          if (content.includes('</think>')) {
             state.endTime = Math.floor(new Date().getTime() / 1000)
             // message = '</section>'
             // buffer = buffer.replaceAll('<div class="think-time">思考中......</div>', ``)
@@ -132,10 +132,12 @@ async function createDialogue(message) {
 
     onclose() {
       console.log('🔌 连接关闭')
+      state.loading = false
     },
 
     onerror(err) {
       console.error('🔥 连接出错:', err)
+      state.loading = false
       throw err
     }
   })
@@ -150,8 +152,15 @@ async function createDialogue(message) {
   width: 100%;
   height: 100%;
   display: flex;
+  overflow: auto;
   .chat-window {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .chat-content {
+      flex: 1;
+    }
   }
 }
 </style>

@@ -14,7 +14,10 @@ const state = reactive({
 
 <style lang="scss" scoped>
 .talk-welcome {
-  padding: 10% 20% 25px;
+  width: calc(100% - 40px);
+  max-width: 960px;
+  min-width: 360px;
+  margin: 120px 20px 20px 20px;
   text-align: center;
   h1 {
     margin-bottom: 20px;

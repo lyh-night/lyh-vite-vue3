@@ -1,5 +1,5 @@
 <template>
-  <div class="talk-send">
+  <div class="chat-input">
     <textarea
       ref="textareaRef"
       v-model="state.inputMessage"
@@ -8,9 +8,9 @@
       @keydown.enter="handleEnter"
       @input="updateHeight"
     />
-    <div class="talk-btn">
-      <i v-if="!props.loading" class="send-icon iconfont icon-icon_AI_fasong" @click="handleSubmit" />
-      <i v-else class="send-icon iconfont icon-wendangai-zanting" @click="stopChat" />
+    <div class="chat-send-container">
+      <i v-if="!props.loading" class="iconfont icon-icon_AI_fasong" @click="handleSubmit" />
+      <i v-else class="iconfont icon-wendangai-zanting" @click="stopChat" />
     </div>
   </div>
 </template>
@@ -48,7 +48,6 @@ function handleSubmit() {
 }
 
 const textareaRef = ref(null)
-
 const updateHeight = () => {
   const el = textareaRef.value
   el.style.height = 'auto'
@@ -61,7 +60,7 @@ function stopChat() {
 </script>
 
 <style lang="scss" scoped>
-.talk-send {
+.chat-input {
   width: calc(100% - 40px);
   max-width: 960px;
   min-width: 360px;
@@ -89,10 +88,10 @@ function stopChat() {
       cursor: not-allowed;
     }
   }
-  .talk-btn {
+  .chat-send-container {
     display: flex;
     justify-content: flex-end;
-    .send-icon {
+    .iconfont {
       cursor: pointer;
       font-size: 30px;
       color: #222;

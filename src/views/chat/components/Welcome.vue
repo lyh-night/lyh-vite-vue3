@@ -1,5 +1,5 @@
 <template>
-  <div class="talk-welcome">
+  <div class="welcome-container">
     <h1>{{ state.title }}</h1>
     <p>{{ state.welcome }}</p>
   </div>
@@ -13,7 +13,7 @@ const state = reactive({
 </script>
 
 <style lang="scss" scoped>
-.talk-welcome {
+.welcome-container {
   width: calc(100% - 40px);
   max-width: 960px;
   min-width: 360px;

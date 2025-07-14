@@ -16,8 +16,7 @@ import ChatInput from './components/ChatInput.vue'
 import ChatContent from './components/ChatContent.vue'
 
 import { fetchEventSource } from '@microsoft/fetch-event-source'
-import MarkdownIt from 'markdown-it'
-import hljs from 'highlight.js'
+import { md } from './js/markdownInstance.js'
 import 'highlight.js/styles/github.css'
 
 const state = reactive({
@@ -26,14 +25,12 @@ const state = reactive({
   contentList: [],
   eventSourceChat: null,
   outputInterval: null,
-  marketIt: {},
   startTime: null,
   endTime: null,
   chatController: null
 })
 
 onMounted(() => {
-  createMarkdownInstance()
   bindCopyEvent()
 })
 
@@ -49,30 +46,11 @@ function bindCopyEvent() {
   })
 }
 
-function createMarkdownInstance() {
-  state.marketIt = new MarkdownIt({
-    html: false,
-    linkify: true,
-    highlight: function (code, language) {
-      const validLang = !!(language && hljs.getLanguage(language))
-      if (validLang) {
-        const lang = language ?? ''
-        return highlightBlock(hljs.highlight(code, { language: lang }).value, lang)
-      }
-      return highlightBlock(hljs.highlightAuto(code).value, '')
-    }
-  })
-}
-
-function highlightBlock(str, lang) {
-  return `<pre class="code-block-wrapper"> <div class="code-block-header"> <span class="code-block-header__lang"> ${lang}</span><span class="code-block-header__copy"> 复制</span> </div> <code class="hljs code-block-body ${lang}">${str}</code> </pre>`
-}
-
 const ChatContentRef = ref(null)
 
 async function createDialogue(message) {
   state.contentList.push({ type: 'send', message: message })
-  state.contentList.push({ type: 'answer', message: '<div class="think-time">思考中......</div>' })
+  state.contentList.push({ type: 'receive', status: 'loading', message: '' })
 
   nextTick(() => {
     ChatContentRef.value.scrollChatStart()
@@ -97,6 +75,7 @@ async function createDialogue(message) {
       if (res.ok && res.headers.get('content-type') === 'text/event-stream') {
         console.log('✔️ 连接成功')
       } else {
+        updateChatEndContent({ key: 'status', vlaue: 'error' })
         throw new Error('❌ 连接失败')
       }
     },
@@ -104,9 +83,11 @@ async function createDialogue(message) {
     onmessage(event) {
       console.log('📥 收到消息:', event.data)
       if (event.data == '[DONE]') {
+        updateChatEndContent({ key: 'status', vlaue: 'finish' })
         state.loading = false
         return
       }
+      updateChatEndContent({ key: 'status', vlaue: 'main' })
       const content = JSON.parse(event.data)
       if (content) {
         buffer += content
@@ -127,7 +108,7 @@ async function createDialogue(message) {
             if (displayBuffer.length < buffer.length) {
               const addChars = buffer.slice(displayBuffer.length, Math.min(displayBuffer.length + 3, buffer.length))
               displayBuffer = displayBuffer + addChars
-              state.contentList[state.contentList.length - 1].message = state.marketIt.render(displayBuffer)
+              updateChatEndContent({ key: 'message', value: md.render(displayBuffer) })
             } else {
               clearInterval(state.outputInterval)
               state.outputInterval = null
@@ -139,15 +120,21 @@ async function createDialogue(message) {
 
     onclose() {
       console.log('🔌 连接关闭')
+      updateChatEndContent({ key: 'status', vlaue: 'close' })
       state.loading = false
     },
 
     onerror(err) {
       console.error('🔥 连接出错:', err)
       state.loading = false
+      updateChatEndContent({ key: 'status', vlaue: 'error' })
       throw err
     }
   })
+}
+
+function updateChatEndContent(obj) {
+  state.contentList[state.contentList.length - 1][obj.key] = obj.value
 }
 
 function stopChat() {

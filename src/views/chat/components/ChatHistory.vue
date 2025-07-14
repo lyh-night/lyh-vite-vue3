@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar" :style="{ 'flex-basis': sidebarWidth }">
+  <div class="chat-sidebar" :style="{ 'flex-basis': sidebarWidth }">
     <div class="header">
       <div v-if="!state.isCollapsed" class="chat-add">
         <span>新建对话</span>
@@ -88,7 +88,7 @@ function selectChat(row) {
 </script>
 
 <style lang="scss" scoped>
-.sidebar {
+.chat-sidebar {
   padding: 10px;
   box-sizing: border-box;
   transition: all 0.2s ease;

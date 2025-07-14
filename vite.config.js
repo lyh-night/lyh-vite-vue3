@@ -19,22 +19,24 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 // SVG
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
-const curTime = dayjs().format('YYYY/MM/DD HH:mm:ss')
+const buildTime = dayjs().format('YYYY/MM/DD HH:mm:ss')
 
-console.log(curTime, '编译时间')
+console.log(buildTime, '编译时间')
 
+let versionInfo = {}
 // 打包时写入 git 信息
 if (process.env.NODE_ENV == 'production') {
   try {
     const resolve = (dir) => {
       return path.join(__dirname, dir)
     }
-    const commitId = execSync('git rev-parse HEAD', { encoding: 'utf8' })
+    const commit = execSync('git rev-parse HEAD', { encoding: 'utf8' })
     const branch = execSync('git symbolic-ref --short HEAD', { encoding: 'utf8' })
-    const wirteInfo = `分支：${branch}\ncommit-id：${commitId}\n时间：${curTime}`
+    const wirteInfo = `分支：${branch}\ncommit-id：${commit}\n时间：${buildTime}`
+    versionInfo = { buildTime, commit, branch }
     fs.writeFile(resolve('public/.versionLog'), wirteInfo, function (error) {
       if (error) {
-        throw new Error(`\n commitID写入失败：${error}`)
+        throw new Error(`\n commit写入失败：${error}`)
       }
     })
   } catch (error) {
@@ -42,6 +44,9 @@ if (process.env.NODE_ENV == 'production') {
   }
 }
 export default defineConfig({
+  define: {
+    __APP_VERSION__: JSON.stringify(versionInfo)
+  },
   server: {
     host: true,
     port: 8080,
@@ -104,10 +109,17 @@ export default defineConfig({
         },
         manualChunks(id) {
           if (id.includes('node_modules')) {
+            if (id.includes('vue-router')) return 'vendor-vue-router'
+            if (id.includes('@antv')) return 'vendor-antv'
             if (id.includes('element-plus')) return 'vendor-element'
             if (id.includes('echarts')) return 'vendor-echarts'
             if (id.includes('codemirror')) return 'vendor-codemirror'
-            return 'vendor'
+            if (id.includes('axios')) return 'vendor-axios'
+            if (id.includes('markdown-it')) return 'vendor-markdown-it'
+            if (id.includes('@vue-office')) return 'vendor-office'
+            if (id.includes('sortablejs')) return 'vendor-sortablejs'
+            if (id.includes('highlight.js')) return 'vendor-highlight'
+            return 'vendor-other'
           }
         }
       }

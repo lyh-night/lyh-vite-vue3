@@ -1,7 +1,6 @@
 // 处理时间
 
-import _dropWhile from 'lodash/dropWhile'
-import _round from 'lodash/round'
+import { dropWhile, round } from 'lodash-es'
 
 /** @constant 1ms作为微秒数 */
 export const ONE_MILLISECOND = 1000 * 1
@@ -31,14 +30,14 @@ const UNIT_STEPS = [
 
 export function formatDuration(duration) {
   // 删除除最后一个单元外的所有太大的单元
-  const [primaryUnit, secondaryUnit] = _dropWhile(
+  const [primaryUnit, secondaryUnit] = dropWhile(
     UNIT_STEPS,
     ({ microseconds }, index) => index < UNIT_STEPS.length - 1 && microseconds > duration
   )
 
   if (primaryUnit.ofPrevious === 1000) {
     // 如果单位是十进制的，则显示为十进制
-    return `${_round(duration / primaryUnit.microseconds, 2)}${primaryUnit.unit}`
+    return `${round(duration / primaryUnit.microseconds, 2)}${primaryUnit.unit}`
   }
 
   const primaryValue = Math.floor(duration / primaryUnit.microseconds)

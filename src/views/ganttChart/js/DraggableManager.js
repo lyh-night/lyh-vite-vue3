@@ -1,4 +1,4 @@
-import _get from 'lodash/get'
+import { get } from 'lodash-es'
 
 export const EUpdateTypes = {
   DragEnd: 'DragEnd',
@@ -58,7 +58,7 @@ export default class DraggableManager {
   _stopDragging() {
     window.removeEventListener('mousemove', this._handleDragEvent)
     window.removeEventListener('mouseup', this._handleDragEvent)
-    const style = _get(document, 'body.style')
+    const style = get(document, 'body.style')
     if (style) {
       style.removeProperty('userSelect')
     }
@@ -132,7 +132,7 @@ export default class DraggableManager {
       }
       window.addEventListener('mousemove', this._handleDragEvent)
       window.addEventListener('mouseup', this._handleDragEvent)
-      const style = _get(document, 'body.style')
+      const style = get(document, 'body.style')
       if (style) {
         style.userSelect = 'none'
       }

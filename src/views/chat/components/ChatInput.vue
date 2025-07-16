@@ -9,8 +9,8 @@
       @input="updateHeight"
     />
     <div class="chat-send-container">
-      <i v-if="!props.loading" class="iconfont icon-icon_AI_fasong" @click="handleSubmit" />
-      <i v-else class="iconfont icon-wendangai-zanting" @click="stopChat" />
+      <i v-if="!props.loading" class="iconfont icon-fasong" @click="handleSubmit" />
+      <i v-else class="iconfont icon-zanting" @click="stopChat" />
     </div>
   </div>
 </template>

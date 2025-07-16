@@ -16,8 +16,9 @@ import ChatInput from './components/ChatInput.vue'
 import ChatContent from './components/ChatContent.vue'
 
 import { fetchEventSource } from '@microsoft/fetch-event-source'
-import { md } from './js/markdownInstance.js'
+import { getSafeHtml } from './js/markdownInstance.js'
 import 'highlight.js/styles/github.css'
+import axios from '@/api/http.js'
 
 const state = reactive({
   loading: false,
@@ -31,20 +32,8 @@ const state = reactive({
 })
 
 onMounted(() => {
-  bindCopyEvent()
+  getHistoryList()
 })
-
-function bindCopyEvent() {
-  document.querySelectorAll('.copy-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const rawCode = decodeURIComponent(btn.getAttribute('data-code'))
-      navigator.clipboard.writeText(rawCode).then(() => {
-        btn.innerText = '已复制'
-        setTimeout(() => (btn.innerText = '复制'), 1500)
-      })
-    })
-  })
-}
 
 const ChatContentRef = ref(null)
 
@@ -108,7 +97,7 @@ async function createDialogue(message) {
             if (displayBuffer.length < buffer.length) {
               const addChars = buffer.slice(displayBuffer.length, Math.min(displayBuffer.length + 3, buffer.length))
               displayBuffer = displayBuffer + addChars
-              updateChatEndContent({ key: 'message', value: md.render(displayBuffer) })
+              updateChatEndContent({ key: 'message', value: getSafeHtml(displayBuffer) })
             } else {
               clearInterval(state.outputInterval)
               state.outputInterval = null
@@ -141,6 +130,31 @@ function stopChat() {
   // 取消对话
   state.chatController && state.chatController.abort()
   state.loading = false
+}
+
+function getHistoryList() {
+  axios.post('http://localhost:3000/api/history').then((res) => {
+    console.log(res, '数据')
+    if (res.code == 0) {
+      const chat_messages = res.data.biz_data.chat_messages
+      state.contentList = chat_messages.map((item) => {
+        if (item.role == 'USER') {
+          return {
+            type: 'send',
+            message: item.content
+          }
+        } else {
+          return {
+            type: 'receive',
+            status: 'finish',
+            thinking_elapsed_secs: item.thinking_elapsed_secs,
+            thinking_content: item.thinking_content ? getSafeHtml(item.thinking_content) : '',
+            message: getSafeHtml(item.content)
+          }
+        }
+      })
+    }
+  })
 }
 </script>
 

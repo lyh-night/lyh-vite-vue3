@@ -3,18 +3,15 @@
     <div ref="contentRef" class="talk-content">
       <div v-for="(item, i) in props.contentList" :key="i">
         <!-- 问题 -->
-        <div v-if="item.type == 'send'" class="talk-content-send-item">
-          <div>{{ item.message }}</div>
-        </div>
+        <avatar v-if="item.type == 'send'" :data="item" />
         <!-- 回答 -->
-        <div v-if="item.type == 'receive'" class="talk-content-answer-item">
-          <SvgIcon name="deepseek" width="30px" height="30px" />
-          <div class="answer-body">
-            <!-- 加载中 -->
-            <div v-if="item.status == 'loading'">loading</div>
-            <!-- 回答具体内容 -->
-            <div v-html="item.message" class="markdown-body" />
-          </div>
+        <div v-if="item.type == 'receive'" class="answer-body">
+          <!-- 加载中 -->
+          <ChatLoading v-if="item.status == 'loading'" />
+          <!-- 思考中 -->
+          <Think v-if="item.thinking_content" :data="item" />
+          <!-- 回答具体内容 -->
+          <div v-html="item.message" class="markdown-body" />
         </div>
       </div>
     </div>
@@ -22,6 +19,10 @@
 </template>
 
 <script setup>
+import ChatLoading from './base/ChatLoading.vue'
+import Avatar from './base/Avatar.vue'
+import Think from './base/Think.vue'
+
 import 'github-markdown-css/github-markdown.css'
 import { useScroll } from '../js/useScroll.js'
 const props = defineProps({
@@ -66,36 +67,9 @@ defineExpose({ scrollChatStart })
     padding: 20px;
     box-sizing: border-box;
     margin: auto;
-    .talk-content-send-item {
-      display: flex;
-      justify-content: flex-end;
-      animation: fadeIn 0.5s ease forwards;
-      font-size: 14px;
+    .answer-body {
+      width: 100%;
       margin-bottom: 10px;
-      > div {
-        max-width: 60%;
-        border-radius: 15px;
-        background-color: #f2f2f2;
-        line-height: 20px;
-        padding: 5px 10px;
-      }
-    }
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(5px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    .talk-content-answer-item {
-      display: flex;
-      .answer-body {
-        width: calc(100% - 30px);
-        margin-bottom: 10px;
-      }
     }
   }
 }

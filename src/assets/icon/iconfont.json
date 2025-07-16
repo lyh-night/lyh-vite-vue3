@@ -6,18 +6,32 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "38841794",
-      "name": "文档ai-暂停",
-      "font_class": "wendangai-zanting",
-      "unicode": "e680",
-      "unicode_decimal": 59008
+      "icon_id": "37254618",
+      "name": "chatgpt",
+      "font_class": "chatgpt",
+      "unicode": "e600",
+      "unicode_decimal": 58880
     },
     {
-      "icon_id": "43840260",
+      "icon_id": "826101",
+      "name": "复制",
+      "font_class": "fuzhi",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "44926985",
       "name": "icon_AI_发送",
-      "font_class": "icon_AI_fasong",
-      "unicode": "e809",
-      "unicode_decimal": 59401
+      "font_class": "fasong",
+      "unicode": "e80a",
+      "unicode_decimal": 59402
+    },
+    {
+      "icon_id": "38841794",
+      "name": "文档ai-暂停",
+      "font_class": "zanting",
+      "unicode": "e680",
+      "unicode_decimal": 59008
     },
     {
       "icon_id": "15838424",

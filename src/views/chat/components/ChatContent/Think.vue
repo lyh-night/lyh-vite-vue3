@@ -1,6 +1,6 @@
 <template>
-  <p class="think-time" @click="changeThink">
-    已深度思考（用时{{ props.data.thinking_elapsed_secs }}s）
+  <p v-if="props.data.thinking_time" class="think-time" @click="changeThink">
+    已深度思考（用时{{ props.data.thinking_time }}）
     <i :class="['iconfont', isExpanded ? 'icon-arrow-down-filling' : 'icon-arrow-up-filling']" />
   </p>
   <div v-show="isExpanded" class="think-container">

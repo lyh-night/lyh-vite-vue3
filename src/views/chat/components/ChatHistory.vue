@@ -93,6 +93,7 @@ function selectChat(row) {
   box-sizing: border-box;
   transition: all 0.2s ease;
   background-color: #f9fbff;
+  flex-shrink: 0;
   .header {
     display: flex;
     align-items: center;

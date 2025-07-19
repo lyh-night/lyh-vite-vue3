@@ -1,5 +1,5 @@
 <template>
-  <div ref="scrollRef" class="chat-content">
+  <div ref="scrollRef" class="chat-content" @scroll="handleScroll">
     <div ref="contentRef" class="talk-content">
       <div v-for="(item, i) in props.contentList" :key="i">
         <!-- 问题 -->
@@ -36,19 +36,22 @@ const props = defineProps({
   }
 })
 
-const { scrollRef, scrollToBottom } = useScroll()
+const { scrollRef, userStopped, scrollToBottom, handleScroll } = useScroll()
 
 onMounted(() => {
   scrollToBottom()
 })
 
+// 这里若是放开对话时会持续性的向下滚动
 onUpdated(() => {
   scrollToBottom()
 })
 
 const contentRef = ref(null)
 
-function scrollChatStart() {}
+function scrollChatStart() {
+  userStopped.value = false
+}
 
 defineExpose({ scrollChatStart })
 </script>

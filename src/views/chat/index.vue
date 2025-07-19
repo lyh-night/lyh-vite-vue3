@@ -18,16 +18,15 @@ import ChatContent from './components/ChatContent/index.vue'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
 import { getSafeHtml, highmd } from './js/markdownInstance.js'
 import 'highlight.js/styles/github.css'
-import axios from '@/api/http.js'
+import chatApi from '@/api/model/chat.js'
+import { formatDuration } from './js/time.js'
+
+const baseUrl = import.meta.env.VITE_APP_BASE_API
 
 const state = reactive({
   loading: false,
-  inputMessage: '',
   contentList: [],
   eventSourceChat: null,
-  outputInterval: null,
-  startTime: null,
-  endTime: null,
   chatController: null
 })
 
@@ -38,20 +37,19 @@ onMounted(() => {
 const ChatContentRef = ref(null)
 
 async function createDialogue(message) {
+  ChatContentRef.value && ChatContentRef.value.scrollChatStart()
   state.contentList.push({ type: 'send', message: message })
-  state.contentList.push({ type: 'receive', status: 'loading', message: '' })
-
-  nextTick(() => {
-    ChatContentRef.value.scrollChatStart()
-  })
+  state.contentList.push({ type: 'receive', status: 'loading', message: '', thinking_content: '' })
 
   let buffer = ''
-  let displayBuffer = ''
+  let thinking = false
+  let thinking_content = ''
+  const start_time = new Date().getTime()
 
   state.chatController = new AbortController()
 
   state.loading = true
-  await fetchEventSource('http://localhost:3000/api/chat', {
+  await fetchEventSource(`${baseUrl}/api/chat`, {
     method: 'POST',
     body: JSON.stringify({ prompt: message }),
     headers: {
@@ -79,31 +77,22 @@ async function createDialogue(message) {
       updateChatEndContent({ key: 'status', vlaue: 'main' })
       const content = JSON.parse(event.data)
       if (content) {
-        buffer += content
-        // 思考内容 记录思考时间
-        if (content.includes('<think>') || content.includes('</think>')) {
-          if (content.includes('<think>')) {
-            state.startTime = Math.floor(new Date().getTime() / 1000)
-            // buffer = buffer.replaceAll('<think>', `<div class="think-time">思考中......</div><section id="think_content_${index}">`)
-          }
-          if (content.includes('</think>')) {
-            state.endTime = Math.floor(new Date().getTime() / 1000)
-            // message = '</section>'
-            // buffer = buffer.replaceAll('<div class="think-time">思考中......</div>', ``)
-          }
-        } else {
-          if (state.outputInterval) return
-          state.outputInterval = setInterval(() => {
-            if (displayBuffer.length < buffer.length) {
-              const addChars = buffer.slice(displayBuffer.length, Math.min(displayBuffer.length + 3, buffer.length))
-              displayBuffer = displayBuffer + addChars
-              updateChatEndContent({ key: 'message', value: getSafeHtml(displayBuffer) })
-            } else {
-              clearInterval(state.outputInterval)
-              state.outputInterval = null
-            }
-          }, 20)
+        // content中包含 <think> 时开始思考，包含 </think> 时停止思考
+        if (content.includes('<think>')) {
+          thinking = true
         }
+        if (content.includes('</think>')) {
+          thinking = false
+        }
+        if (thinking) {
+          thinking_content = thinking_content + content
+          updateChatEndContent({ key: 'thinking_content', value: highmd(thinking_content) })
+          const thinking_time = formatDuration(Math.floor((new Date().getTime() - start_time) / 1000))
+          updateChatEndContent({ key: 'thinking_time', value: thinking_time })
+          return
+        }
+        buffer += content
+        updateChatEndContent({ key: 'message', value: getSafeHtml(buffer) })
       }
     },
 
@@ -126,14 +115,14 @@ function updateChatEndContent(obj) {
   state.contentList[state.contentList.length - 1][obj.key] = obj.value
 }
 
+// 取消对话
 function stopChat() {
-  // 取消对话
   state.chatController && state.chatController.abort()
   state.loading = false
 }
 
 function getHistoryList() {
-  axios.post('http://localhost:3000/api/history').then((res) => {
+  chatApi.getChatDetail({}).then((res) => {
     console.log(res, '数据')
     if (res.code == 0) {
       const chat_messages = res.data.biz_data.chat_messages
@@ -147,9 +136,8 @@ function getHistoryList() {
           return {
             type: 'receive',
             status: 'finish',
-            thinking_elapsed_secs: item.thinking_elapsed_secs,
+            thinking_time: formatDuration(item.thinking_elapsed_secs),
             thinking_content: highmd(item.thinking_content),
-            // thinking_content: item.thinking_content ? getSafeHtml(item.thinking_content) : '',
             message: getSafeHtml(item.content)
           }
         }

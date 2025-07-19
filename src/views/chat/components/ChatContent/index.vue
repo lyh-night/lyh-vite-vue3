@@ -19,12 +19,12 @@
 </template>
 
 <script setup>
-import ChatLoading from './base/ChatLoading.vue'
-import Avatar from './base/Avatar.vue'
-import Think from './base/Think.vue'
+import ChatLoading from './ChatLoading.vue'
+import Avatar from './Avatar.vue'
+import Think from './Think.vue'
 
 import 'github-markdown-css/github-markdown.css'
-import { useScroll } from '../js/useScroll.js'
+import { useScroll } from '../../js/useScroll.js'
 const props = defineProps({
   loading: {
     type: Boolean,
@@ -54,8 +54,8 @@ defineExpose({ scrollChatStart })
 </script>
 
 <style lang="scss">
-@use '../style/markdown-body.scss';
-@use '../style/custom-code-block.scss';
+@use '../../style/markdown-body.scss';
+@use '../../style/custom-code-block.scss';
 
 .chat-content {
   overflow: auto;

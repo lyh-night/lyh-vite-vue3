@@ -23,3 +23,7 @@ export function getSafeHtml(aiText) {
   const rawHtml = md.render(aiText)
   return DOMPurify.sanitize(rawHtml)
 }
+
+export function highmd(val) {
+  return val.replaceAll('\n', '<div style="height: 6px"></div>')
+}

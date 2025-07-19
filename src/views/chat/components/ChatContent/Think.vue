@@ -4,7 +4,7 @@
     <i :class="['iconfont', isExpanded ? 'icon-arrow-down-filling' : 'icon-arrow-up-filling']" />
   </p>
   <div v-show="isExpanded" class="think-container">
-    <div v-html="props.data.thinking_content" class="markdown-body" />
+    <div v-html="props.data.thinking_content" class="think-main" />
     <div class="think-line" />
   </div>
 </template>
@@ -50,6 +50,12 @@ function changeThink() {
     margin-top: 5px;
     top: 0;
     left: 0;
+  }
+  .think-main {
+    white-space: pre-wrap;
+    line-height: 26px;
+    color: #8b8b8b;
+    font-size: 14px;
   }
 }
 </style>

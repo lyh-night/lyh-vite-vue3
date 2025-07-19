@@ -13,10 +13,10 @@
 import ChatHistory from './components/ChatHistory.vue'
 import Welcome from './components/Welcome.vue'
 import ChatInput from './components/ChatInput.vue'
-import ChatContent from './components/ChatContent.vue'
+import ChatContent from './components/ChatContent/index.vue'
 
 import { fetchEventSource } from '@microsoft/fetch-event-source'
-import { getSafeHtml } from './js/markdownInstance.js'
+import { getSafeHtml, highmd } from './js/markdownInstance.js'
 import 'highlight.js/styles/github.css'
 import axios from '@/api/http.js'
 
@@ -148,7 +148,8 @@ function getHistoryList() {
             type: 'receive',
             status: 'finish',
             thinking_elapsed_secs: item.thinking_elapsed_secs,
-            thinking_content: item.thinking_content ? getSafeHtml(item.thinking_content) : '',
+            thinking_content: highmd(item.thinking_content),
+            // thinking_content: item.thinking_content ? getSafeHtml(item.thinking_content) : '',
             message: getSafeHtml(item.content)
           }
         }

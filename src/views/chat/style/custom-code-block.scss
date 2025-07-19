@@ -26,6 +26,9 @@
     &__copy {
       cursor: pointer;
       user-select: none;
+      .icon-fuzhi {
+        vertical-align: bottom;
+      }
 
       &:hover {
         color: #65a665;

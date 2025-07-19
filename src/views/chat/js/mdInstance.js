@@ -3,7 +3,7 @@ import hljs from 'highlight.js'
 import DOMPurify from 'dompurify'
 
 export function highlightBlock(str, lang) {
-  return `<pre class="code-block-wrapper"> <div class="code-block-header"> <span class="code-block-header__lang"> ${lang}</span><span class="code-block-header__copy">复制</span> </div> <code class="hljs code-block-body ${lang}">${str}</code> </pre>`
+  return `<pre class="code-block-wrapper"> <div class="code-block-header"> <span class="code-block-header__lang"> ${lang}</span><span class="code-block-header__copy"><i class="iconfont icon-fuzhi"></i>复制</span> </div> <code class="hljs code-block-body ${lang}">${str}</code> </pre>`
 }
 
 export const md = new MarkdownIt({
@@ -19,11 +19,11 @@ export const md = new MarkdownIt({
   }
 })
 
-export function getSafeHtml(aiText) {
+export function handleChatMessage(aiText) {
   const rawHtml = md.render(aiText)
   return DOMPurify.sanitize(rawHtml)
 }
 
-export function highmd(val) {
+export function handleThinkMessage(val) {
   return val.replaceAll('\n', '<div style="height: 6px"></div>')
 }

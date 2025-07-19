@@ -1,6 +1,6 @@
 <template>
   <div ref="scrollRef" class="chat-content" @scroll="handleScroll">
-    <div ref="contentRef" class="talk-content">
+    <div ref="contentRef" class="talk-content" @click="handleContentClick">
       <div v-for="(item, i) in props.contentList" :key="i">
         <!-- 问题 -->
         <avatar v-if="item.type == 'send'" :data="item" />
@@ -25,6 +25,8 @@ import Think from './Think.vue'
 
 import 'github-markdown-css/github-markdown.css'
 import { useScroll } from '../../js/useScroll.js'
+import { useClipboard } from '../../js/useCopy.js'
+
 const props = defineProps({
   loading: {
     type: Boolean,
@@ -51,6 +53,19 @@ const contentRef = ref(null)
 
 function scrollChatStart() {
   userStopped.value = false
+}
+
+const { copy } = useClipboard()
+
+async function handleContentClick(e) {
+  const target = e.target
+  if (target.classList.contains('code-block-header__copy')) {
+    const pre = target.closest('pre')
+    const code = pre?.querySelector('code')?.innerText
+    if (code) {
+      await copy(code)
+    }
+  }
 }
 
 defineExpose({ scrollChatStart })

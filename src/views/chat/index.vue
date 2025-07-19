@@ -16,7 +16,7 @@ import ChatInput from './components/ChatInput.vue'
 import ChatContent from './components/ChatContent/index.vue'
 
 import { fetchEventSource } from '@microsoft/fetch-event-source'
-import { getSafeHtml, highmd } from './js/markdownInstance.js'
+import { handleChatMessage, handleThinkMessage } from './js/mdInstance.js'
 import 'highlight.js/styles/github.css'
 import chatApi from '@/api/model/chat.js'
 import { formatDuration } from './js/time.js'
@@ -86,13 +86,13 @@ async function createDialogue(message) {
         }
         if (thinking) {
           thinking_content = thinking_content + content
-          updateChatEndContent({ key: 'thinking_content', value: highmd(thinking_content) })
+          updateChatEndContent({ key: 'thinking_content', value: handleThinkMessage(thinking_content) })
           const thinking_time = formatDuration(Math.floor((new Date().getTime() - start_time) / 1000))
           updateChatEndContent({ key: 'thinking_time', value: thinking_time })
           return
         }
         buffer += content
-        updateChatEndContent({ key: 'message', value: getSafeHtml(buffer) })
+        updateChatEndContent({ key: 'message', value: handleChatMessage(buffer) })
       }
     },
 
@@ -137,8 +137,8 @@ function getHistoryList() {
             type: 'receive',
             status: 'finish',
             thinking_time: formatDuration(item.thinking_elapsed_secs),
-            thinking_content: highmd(item.thinking_content),
-            message: getSafeHtml(item.content)
+            thinking_content: handleThinkMessage(item.thinking_content),
+            message: handleChatMessage(item.content)
           }
         }
       })
